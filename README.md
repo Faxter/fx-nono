@@ -1,6 +1,9 @@
 # fx-nono
 A pygame app for solving nonograms
 
+## start
+`./run.sh`
+
 ## development plan
 1. puzzle is supplied as config file, containing:
     * grid size
