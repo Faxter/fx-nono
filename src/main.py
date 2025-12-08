@@ -2,7 +2,7 @@ import pygame
 
 from src.Background import Background
 
-SCREEN_BACKGROUND = (233, 240, 233)
+COLOUR_GRID = (0, 0, 0)
 GRID_WIDTH = 5
 GRID_HEIGHT = 10
 CELL_SIZE = 50
@@ -17,11 +17,11 @@ def main():
     background: Background = Background(GRID_HEIGHT, GRID_WIDTH, CELL_SIZE)
 
     while True:
-        for event in pygame.event.get():
+        for event in pygame.event.get(exclude=pygame.MOUSEBUTTONUP):
             if event.type == pygame.QUIT:
                 return
 
-        screen.fill(SCREEN_BACKGROUND)
+        screen.fill(COLOUR_GRID)
         background.update()
         background.draw_grid(screen)
         pygame.display.flip()
