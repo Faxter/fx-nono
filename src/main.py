@@ -2,11 +2,9 @@ import pygame
 
 from src.Background import Background
 
-COLOUR_GRID = (0, 0, 0)
 GRID_WIDTH = 5
 GRID_HEIGHT = 10
 CELL_SIZE = 50
-CELL_BORDER = 1
 GAME_FPS = 60
 
 
@@ -21,7 +19,6 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        screen.fill(COLOUR_GRID)
         background.update()
         background.draw_grid(screen)
         pygame.display.flip()
