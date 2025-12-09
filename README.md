@@ -2,7 +2,10 @@
 A pygame app for solving nonograms
 
 ## start
-`./run.sh`
+```
+source .venv/bin/activate
+./run.sh
+```
 
 ## development plan
 1. puzzle is supplied as config file, containing:
