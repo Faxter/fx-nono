@@ -1,10 +1,16 @@
 # fx-nono
 A pygame app for solving nonograms
 
-## start
+## run application
 ```
 source .venv/bin/activate
 ./run.sh
+```
+
+## run tests
+```
+./test.sh
+./test.sh coverage
 ```
 
 ## development plan
