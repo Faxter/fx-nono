@@ -1,9 +1,14 @@
 # fx-nono
 A pygame app for solving nonograms
 
+## prepare environment
+```
+uv sync
+source .venv/bin/activate
+```
+
 ## run application
 ```
-source .venv/bin/activate
 ./run.sh
 ```
 
@@ -19,14 +24,14 @@ source .venv/bin/activate
     * column hints
     * row hints
 1. display:
-    * interactive grid
+    * ✅️ interactive grid
     * column hints on the top
     * row hints on the left
 1. control features:
-    * left-click to mark as filled in
-    * right-click to mark free
-    * middle-click for a temporary helper mark
-    * matching click on cell clears it
+    * ✅️ left-click to mark as filled in
+    * ✅️ right-click to mark free
+    * ✅️ middle-click for a temporary helper mark
+    * ✅️ matching click on cell clears it
     * left-click on hint crosses it out
     * left-click on crossed out hint removes the crossing out
 1. once every cell is marked, checks for success
