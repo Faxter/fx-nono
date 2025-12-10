@@ -1,14 +1,16 @@
 from src.nonogram import Nonogram
-from src.puzzle import parse_puzzle
+from src.puzzle import Puzzle
 from src.ui import Ui
 
-GRID_WIDTH = 5
-GRID_HEIGHT = 10
-CELL_SIZE = 50
+PUZZLE_WIDTH = 5
+PUZZLE_HEIGHT = 8
+ROW_HINTS = [[3], [1, 1], [1, 1, 1], [1, 1, 1], [3], [3], [3], [1]]
+COL_HINTS = [[3], [1, 3], [1, 6], [1, 3], [3]]
+CELL_SIZE = 30
 
 
 def main():
-    puzzle = parse_puzzle({"rows": GRID_HEIGHT, "columns": GRID_WIDTH})
+    puzzle = Puzzle(PUZZLE_HEIGHT, PUZZLE_WIDTH, ROW_HINTS, COL_HINTS)
     nonogram = Nonogram(puzzle)
     ui = Ui(nonogram, CELL_SIZE)
     ui.run()
