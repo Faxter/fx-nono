@@ -103,6 +103,10 @@ class Ui:
         )
 
     def draw_hints(self):
+        self.__draw_top_hints()
+        self.__draw_left_hints()
+
+    def __draw_top_hints(self):
         for i in range(self.nonogram.grid.columns):
             for j in range(self.max_col_hints):
                 rect = pygame.draw.rect(
@@ -110,14 +114,14 @@ class Ui:
                     COLOUR_HINT_BACKGROUND,
                     self.__grid_rect(self.max_row_hints + i, j),
                 )
-                column_hints = self.nonogram.puzzle.column_hints[i]
-                no_of_empty_hint_cells = self.max_col_hints - len(column_hints)
-                if j - no_of_empty_hint_cells >= 0:
-                    hint_text = str(column_hints[j - no_of_empty_hint_cells])
-                    text_surface = self.font.render(hint_text, True, COLOUR_HINT_FONT)
-                    rect_alignment = text_surface.get_rect(center=rect.center)
-                    self.screen.blit(text_surface, rect_alignment)
+                self.__fill_with_hint(
+                    rect,
+                    j,
+                    self.nonogram.puzzle.column_hints[i],
+                    self.max_col_hints,
+                )
 
+    def __draw_left_hints(self):
         for i in range(self.nonogram.grid.rows):
             for j in range(self.max_row_hints):
                 rect = pygame.draw.rect(
@@ -125,10 +129,17 @@ class Ui:
                     COLOUR_HINT_BACKGROUND,
                     self.__grid_rect(j, self.max_col_hints + i),
                 )
-                row_hints = self.nonogram.puzzle.row_hints[i]
-                no_of_empty_hint_cells = self.max_row_hints - len(row_hints)
-                if j - no_of_empty_hint_cells >= 0:
-                    hint_text = str(row_hints[j - no_of_empty_hint_cells])
-                    text_surface = self.font.render(hint_text, True, COLOUR_HINT_FONT)
-                    rect_alignment = text_surface.get_rect(center=rect.center)
-                    self.screen.blit(text_surface, rect_alignment)
+                self.__fill_with_hint(
+                    rect,
+                    j,
+                    self.nonogram.puzzle.row_hints[i],
+                    self.max_row_hints,
+                )
+
+    def __fill_with_hint(self, rect, hint_index, hints, max_amount_of_hints):
+        no_of_empty_hint_cells = max_amount_of_hints - len(hints)
+        if hint_index - no_of_empty_hint_cells >= 0:
+            hint_text = str(hints[hint_index - no_of_empty_hint_cells])
+            text_surface = self.font.render(hint_text, True, COLOUR_HINT_FONT)
+            rect_alignment = text_surface.get_rect(center=rect.center)
+            self.screen.blit(text_surface, rect_alignment)
