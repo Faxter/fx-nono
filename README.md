@@ -20,9 +20,9 @@ source .venv/bin/activate
 
 ## development plan
 1. puzzle is supplied as config file, containing:
-    * grid size
-    * column hints
-    * row hints
+    * ✅️ grid size
+    * ✅️ column hints
+    * ✅️ row hints
 1. display:
     * ✅️ interactive grid
     * ✅️ column hints on the top
