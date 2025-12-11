@@ -2,6 +2,10 @@ from src.cell_state import CellState
 
 
 class Grid:
+    """
+    The grid is the interactive part where cells can be altered into different states.
+    """
+
     def __init__(self, rows: int, columns: int):
         self.rows = rows
         self.columns = columns

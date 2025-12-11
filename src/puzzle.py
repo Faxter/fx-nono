@@ -1,3 +1,6 @@
+from src.hint import create_hints
+
+
 class Puzzle:
     def __init__(
         self,
@@ -24,5 +27,5 @@ class Puzzle:
             raise ValueError("number of column hints does not match number of columns")
         self.rows = rows
         self.columns = columns
-        self.row_hints = row_hints
-        self.column_hints = column_hints
+        self.row_hints = create_hints(row_hints)
+        self.column_hints = create_hints(column_hints)

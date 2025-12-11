@@ -1,5 +1,6 @@
 import pygame
 
+from src.hint import Hint
 from src.nonogram import Nonogram
 
 COLOUR_BORDER = (0, 0, 0)
@@ -45,32 +46,87 @@ class Ui:
         pygame.quit()
 
     def __handle_click(self, button, position):
-        col, row = self.__cell_coord_from_position(position)
         left_pressed = button == 1
         middle_pressed = button == 2
         right_pressed = button == 3
+        if self.__is_click_event_on_grid(position):
+            col, row = self.__grid_coord_from_position(position)
+            if (
+                (left_pressed and self.nonogram.grid.is_cell_full(col, row))
+                or (middle_pressed and self.nonogram.grid.is_cell_maybe(col, row))
+                or (right_pressed and self.nonogram.grid.is_cell_empty(col, row))
+            ):
+                self.nonogram.grid.reset(col, row)
+            elif left_pressed:
+                self.nonogram.grid.fill(col, row)
+            elif middle_pressed:
+                self.nonogram.grid.maybe(col, row)
+            elif right_pressed:
+                self.nonogram.grid.clear(col, row)
+        elif self.__is_click_event_on_top_hint(position):
+            col, row = self.__hint_coord_from_position(position)
+            column_hints = self.nonogram.puzzle.column_hints[col - self.max_row_hints]
+            no_of_empty_hint_cells = self.max_col_hints - len(column_hints)
+            hint_index = row - no_of_empty_hint_cells
+            if hint_index >= 0:
+                hint = column_hints[hint_index]
+                if left_pressed:
+                    hint.crossed = not hint.crossed
+        elif self.__is_click_event_on_left_hint(position):
+            col, row = self.__hint_coord_from_position(position)
+            row_hints = self.nonogram.puzzle.row_hints[row - self.max_col_hints]
+            no_of_empty_hint_cells = self.max_row_hints - len(row_hints)
+            hint_index = col - no_of_empty_hint_cells
+            if hint_index >= 0:
+                hint = row_hints[col - no_of_empty_hint_cells]
+                if left_pressed:
+                    hint.crossed = not hint.crossed
 
-        if (
-            (left_pressed and self.nonogram.grid.is_cell_full(col, row))
-            or (middle_pressed and self.nonogram.grid.is_cell_maybe(col, row))
-            or (right_pressed and self.nonogram.grid.is_cell_empty(col, row))
-        ):
-            self.nonogram.grid.reset(col, row)
-        elif left_pressed:
-            self.nonogram.grid.fill(col, row)
-        elif middle_pressed:
-            self.nonogram.grid.maybe(col, row)
-        elif right_pressed:
-            self.nonogram.grid.clear(col, row)
+    def __is_click_event_on_grid(self, position):
+        x, y = position
+        col = x // self.cell_size
+        row = y // self.cell_size
+        return (
+            col >= self.max_row_hints
+            and col <= self.max_row_hints + self.nonogram.grid.columns
+            and row >= self.max_col_hints
+            and row <= self.max_col_hints + self.nonogram.grid.rows
+        )
 
-    def __cell_coord_from_position(self, position):
+    def __is_click_event_on_top_hint(self, position):
+        x, y = position
+        col = x // self.cell_size
+        row = y // self.cell_size
+        return (
+            row >= 0
+            and row < self.max_col_hints
+            and col >= self.max_row_hints
+            and col < self.max_row_hints + self.nonogram.puzzle.columns
+        )
+
+    def __is_click_event_on_left_hint(self, position):
+        x, y = position
+        col = x // self.cell_size
+        row = y // self.cell_size
+        return (
+            col >= 0
+            and col < self.max_row_hints
+            and row >= self.max_col_hints
+            and row < self.max_col_hints + self.nonogram.puzzle.rows
+        )
+
+    def __grid_coord_from_position(self, position):
         x, y = position
         col = x // self.cell_size - self.max_row_hints
         row = y // self.cell_size - self.max_col_hints
-        col = max(0, col)
-        row = max(0, row)
-        col = min(col, self.nonogram.grid.columns - 1)
-        row = min(row, self.nonogram.grid.rows - 1)
+        col = min(max(0, col), self.nonogram.grid.columns - 1)
+        row = min(max(0, row), self.nonogram.grid.rows - 1)
+        return col, row
+
+    def __hint_coord_from_position(self, position):
+        x, y = position
+        col = x // self.cell_size
+        row = y // self.cell_size
         return col, row
 
     def draw_grid(self):
@@ -136,10 +192,18 @@ class Ui:
                     self.max_row_hints,
                 )
 
-    def __fill_with_hint(self, rect, hint_index, hints, max_amount_of_hints):
+    def __fill_with_hint(
+        self,
+        rect: pygame.Rect,
+        hint_index: int,
+        hints: list[Hint],
+        max_amount_of_hints: int,
+    ):
         no_of_empty_hint_cells = max_amount_of_hints - len(hints)
         if hint_index - no_of_empty_hint_cells >= 0:
-            hint_text = str(hints[hint_index - no_of_empty_hint_cells])
+            hint = hints[hint_index - no_of_empty_hint_cells]
+            hint_text = str(hint.value)
+            self.font.strikethrough = hint.crossed
             text_surface = self.font.render(hint_text, True, COLOUR_HINT_FONT)
             rect_alignment = text_surface.get_rect(center=rect.center)
             self.screen.blit(text_surface, rect_alignment)
