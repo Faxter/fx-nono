@@ -25,8 +25,8 @@ source .venv/bin/activate
     * row hints
 1. display:
     * ✅️ interactive grid
-    * column hints on the top
-    * row hints on the left
+    * ✅️ column hints on the top
+    * ✅️ row hints on the left
 1. control features:
     * ✅️ left-click to mark as filled in
     * ✅️ right-click to mark free
@@ -42,6 +42,7 @@ source .venv/bin/activate
 ## future features
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
+* click and drag to mark multiple cells in a row
 
 ## future initiatives
 * hint system with reasoning on the next step to help when getting stuck
