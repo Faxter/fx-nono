@@ -3,6 +3,9 @@ class Hint:
         self.value = value
         self.crossed = False
 
+    def toggle_crossed(self):
+        self.crossed = not self.crossed
+
 
 def create_hints(hints: list[list[int]]) -> list[list[Hint]]:
     return [[Hint(value) for value in group] for group in hints]

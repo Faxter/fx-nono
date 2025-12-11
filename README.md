@@ -32,8 +32,8 @@ source .venv/bin/activate
     * ✅️ right-click to mark free
     * ✅️ middle-click for a temporary helper mark
     * ✅️ matching click on cell clears it
-    * left-click on hint crosses it out
-    * left-click on crossed out hint removes the crossing out
+    * ✅️ left-click on hint crosses it out
+    * ✅️ left-click on crossed out hint removes the crossing out
 1. once every cell is marked, checks for success
     * on success: displays win message
     * on fail: displays fail message and asks if contradiction should be displayed

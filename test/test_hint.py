@@ -15,3 +15,8 @@ class TestHint(unittest.TestCase):
         self.assertEqual(hints[0][0].value, 1)
         self.assertEqual(hints[1][0].value, 3)
         self.assertEqual(hints[1][1].value, 3)
+
+    def test_toggle_crossed(self):
+        hint = Hint(1)
+        hint.toggle_crossed()
+        self.assertTrue(hint.crossed)
