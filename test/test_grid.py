@@ -68,3 +68,22 @@ class TestGrid(unittest.TestCase):
         g.fill(0, 1)
         column = g.get_column(0)
         self.assertListEqual(column, [CellState.UNKNOWN, CellState.FULL])
+
+    def test_is_complete(self):
+        g = Grid(2, 3)
+        g.fill(0, 0)
+        g.fill(1, 0)
+        g.clear(2, 0)
+        g.clear(0, 1)
+        g.fill(1, 1)
+        g.fill(2, 1)
+        self.assertTrue(g.is_complete())
+
+    def test_is_complete_missing_cell(self):
+        g = Grid(2, 3)
+        g.fill(0, 0)
+        g.fill(1, 0)
+        g.clear(2, 0)
+        g.clear(0, 1)
+        g.fill(1, 1)
+        self.assertFalse(g.is_complete())

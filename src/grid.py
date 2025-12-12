@@ -40,3 +40,10 @@ class Grid:
 
     def get_column(self, index: int):
         return self._grid[index]
+
+    def is_complete(self):
+        for c in range(self.columns):
+            for cell in self.get_column(c):
+                if cell != CellState.FULL and cell != CellState.EMPTY:
+                    return False
+        return True
