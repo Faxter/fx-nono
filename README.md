@@ -44,13 +44,12 @@ To load a different puzzle, create a `.json` file as desribed below and provide 
 Theoretically, we could do without width and height because they are implicitly given by the length of the hint lists. But this way, it is easier to immediately read to size of the puzzle.
 
     
-## planned features
-* display failure and success messages in UI instead of command line
+## feature ideas
 * display cell states with sprites instead of plain colour
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
 * click and drag to mark multiple cells in a row
 * highlight rows and columns with contradiction on failed verification
 
-## future initiatives
+## initiative ideas
 * hint system with reasoning on the next step to help when getting stuck

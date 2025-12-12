@@ -6,3 +6,5 @@ class Colour:
     MAYBE = (220, 30, 170)
     HINT_BACKGROUND = (80, 83, 80)
     HINT_FONT = (255, 255, 255)
+    SUCCESS = (0, 240, 25)
+    FAILURE = (240, 0, 25)

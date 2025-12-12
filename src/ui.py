@@ -28,7 +28,7 @@ class Ui:
         height = (nonogram.puzzle.rows + self.max_col_hints) * self.cell_size
         self.screen = pygame.display.set_mode((width, height))
         self.running = True
-        self.completed = False
+        self.completed: None | bool = None
 
     def run(self):
         while self.running:
@@ -41,6 +41,7 @@ class Ui:
                     self.__check_complete()
             self.__draw_hints()
             self.__draw_grid()
+            self.__draw_success_indicator()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)
         pygame.quit()
@@ -81,6 +82,7 @@ class Ui:
         )
 
     def __click_into_grid(self, col: int, row: int, button: MouseButton):
+        self.completed = None
         grid_col, grid_row = self.__grid_coord_from_position(col, row)
         left_pressed = button == MouseButton.LEFT
         middle_pressed = button == MouseButton.MIDDLE
@@ -121,12 +123,7 @@ class Ui:
 
     def __check_complete(self):
         if self.nonogram.grid.is_complete():
-            if not self.nonogram.verify():
-                self.display_failure()
-                self.completed = False
-            else:
-                self.display_success()
-                self.completed = True
+            self.completed = self.nonogram.verify()
 
     def __draw_grid(self):
         grid = self.nonogram.grid
@@ -207,8 +204,11 @@ class Ui:
             rect_alignment = text_surface.get_rect(center=rect.center)
             self.screen.blit(text_surface, rect_alignment)
 
-    def display_success(self):
-        print("success!")
-
-    def display_failure(self):
-        print("failure!")
+    def __draw_success_indicator(self):
+        if self.completed is None:
+            return
+        pygame.draw.rect(
+            self.screen,
+            Colour.SUCCESS if self.completed else Colour.FAILURE,
+            self.__grid_rect(0, 0),
+        )
