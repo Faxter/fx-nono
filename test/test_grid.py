@@ -12,7 +12,9 @@ class TestGrid(unittest.TestCase):
         self.assertIsInstance(g, Grid)
         self.assertEqual(len(g._grid), columns)
         self.assertEqual(len(g._grid[0]), rows)
-        self.assertTrue(all(cell == CellState.UNKNOWN for col in g._grid for cell in col))
+        self.assertTrue(
+            all(cell == CellState.UNKNOWN for col in g._grid for cell in col)
+        )
 
     def test_fill(self):
         g = Grid(5, 10)
@@ -52,3 +54,17 @@ class TestGrid(unittest.TestCase):
     def test_is_cell_unknown(self):
         g = Grid(5, 10)
         self.assertTrue(g.is_cell_unknown(1, 1))
+
+    def test_get_row(self):
+        g = Grid(2, 3)
+        g.fill(1, 0)
+        row = g.get_row(0)
+        self.assertListEqual(
+            row, [CellState.UNKNOWN, CellState.FULL, CellState.UNKNOWN]
+        )
+
+    def test_get_column(self):
+        g = Grid(2, 3)
+        g.fill(0, 1)
+        column = g.get_column(0)
+        self.assertListEqual(column, [CellState.UNKNOWN, CellState.FULL])

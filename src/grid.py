@@ -34,3 +34,9 @@ class Grid:
 
     def is_cell_unknown(self, x: int, y: int):
         return self._grid[x][y] == CellState.UNKNOWN
+
+    def get_row(self, index: int):
+        return [self._grid[column][index] for column in range(self.columns)]
+
+    def get_column(self, index: int):
+        return self._grid[index]
