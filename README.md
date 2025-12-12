@@ -35,14 +35,16 @@ source .venv/bin/activate
     * ✅️ left-click on hint crosses it out
     * ✅️ left-click on crossed out hint removes the crossing out
 1. once every cell is marked, checks for success
-    * on success: displays win message
-    * on fail: displays fail message and asks if contradiction should be displayed
-        * if yes, highlights rows and columns with contradictions
-
+    * ✅️ on success: displays win message
+        * keep window open in 'read-only' until quit
+    * ✅️ on fail: displays fail message
+        * continue interaction until success or quit
+    
 ## future features
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
 * click and drag to mark multiple cells in a row
+* highlight rows and columns with contradiction on failed verification
 
 ## future initiatives
 * hint system with reasoning on the next step to help when getting stuck
