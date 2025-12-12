@@ -10,6 +10,7 @@ source .venv/bin/activate
 ## run application
 ```
 ./run.sh
+./run.sh puzzles/other-puzzle.json
 ```
 
 ## run tests
@@ -18,29 +19,34 @@ source .venv/bin/activate
 ./test.sh coverage
 ```
 
-## development plan
-1. puzzle is supplied as config file, containing:
-    * ✅️ grid size
-    * ✅️ column hints
-    * ✅️ row hints
-1. display:
-    * ✅️ interactive grid
-    * ✅️ column hints on the top
-    * ✅️ row hints on the left
-1. control features:
-    * ✅️ left-click to mark as filled in
-    * ✅️ right-click to mark free
-    * ✅️ middle-click for a temporary helper mark
-    * ✅️ matching click on cell clears it
-    * ✅️ left-click on hint crosses it out
-    * ✅️ left-click on crossed out hint removes the crossing out
-1. once every cell is marked, checks for success
-    * ✅️ on success: displays win message
-        * ✅️ keep window open in 'read-only' until quit
-    * ✅️ on fail: displays fail message
-        * ✅️ continue interaction until success or quit
+## how to nonogram
+The numbers on the top and to the left are called `hints`. They tell you how long the blocks need to be in that column or row.
+
+* Left-click to mark a cell as `full`
+* Right-click to mark a cell as `empty`
+* Click a cell again to reset it
+* Middle-click to mark a cell as `unsure` (for temporary markings, use is optional)
+
+You can click a hint to strike it through. Do so again to toggle.
+
+Once every cell is marked either as `full` or `empty`, the resulting image is locked in for you to admire in your success. If your solution does not match the hints, you can continue puzzling until you find a correct configuration.
+
+## load different puzzle
+To load a different puzzle, create a `.json` file as desribed below and provide it to `run.sh` as described above. For reference, have a look at `puzzles/example.json`.
+
+| key     | type                | description                                                     |
+| ------- | ------------------- | --------------------------------------------------------------- |
+| width   | int                 | number of columns                                               |
+| height  | int                 | number of rows                                                  |
+| rows    | list of list of int | row hints (each inner list contains the hints for one row)      |
+| columns | list of list of int | column hints (each inner list contains the hints for one column)|
+
+Theoretically, we could do without width and height because they are implicitly given by the length of the hint lists. But this way, it is easier to immediately read to size of the puzzle.
+
     
-## future features
+## planned features
+* display failure and success messages in UI instead of command line
+* display cell states with sprites instead of plain colour
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
 * click and drag to mark multiple cells in a row
