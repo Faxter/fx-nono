@@ -30,23 +30,26 @@ class Ui:
         self.running = True
 
     def run(self):
+        quit = False
         while self.running:
             self.screen.fill(Colour.BORDER)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    quit = True
                 elif event.type == pygame.MOUSEBUTTONUP:
                     self.__handle_click(event.button, event.pos)
+                    self.__check_complete()
             self.__draw_hints()
             self.__draw_grid()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)
-        pygame.quit()
+        if quit:
+            pygame.quit()
 
     def __handle_click(self, button, position):
-        x, y = position
-        col = x // self.cell_size
-        row = y // self.cell_size
+        col = position[0] // self.cell_size
+        row = position[1] // self.cell_size
         btn: MouseButton = get_mouse_button(button)
         if self.__is_click_event_on_grid(col, row):
             self.__click_into_grid(col, row, btn)
@@ -79,11 +82,6 @@ class Ui:
             and row < self.max_col_hints + self.nonogram.puzzle.rows
         )
 
-    def __grid_coord_from_position(self, col: int, row: int):
-        col -= self.max_row_hints
-        row -= self.max_col_hints
-        return col, row
-
     def __click_into_grid(self, col: int, row: int, button: MouseButton):
         grid_col, grid_row = self.__grid_coord_from_position(col, row)
         left_pressed = button == MouseButton.LEFT
@@ -102,6 +100,11 @@ class Ui:
         elif right_pressed:
             self.nonogram.grid.clear(grid_col, grid_row)
 
+    def __grid_coord_from_position(self, col: int, row: int):
+        col -= self.max_row_hints
+        row -= self.max_col_hints
+        return col, row
+
     def __click_into_top_hints(self, col: int, row: int):
         column_hints = self.nonogram.puzzle.column_hints[col - self.max_row_hints]
         no_of_empty_hint_cells = self.max_col_hints - len(column_hints)
@@ -117,6 +120,10 @@ class Ui:
         if hint_index >= 0:
             hint = row_hints[col - no_of_empty_hint_cells]
             hint.toggle_crossed()
+
+    def __check_complete(self):
+        if self.nonogram.grid.is_complete():
+            self.running = False
 
     def __draw_grid(self):
         grid = self.nonogram.grid
@@ -196,3 +203,9 @@ class Ui:
             text_surface = self.font.render(hint_text, True, Colour.HINT_FONT)
             rect_alignment = text_surface.get_rect(center=rect.center)
             self.screen.blit(text_surface, rect_alignment)
+
+    def display_success(self):
+        print("success!")
+
+    def display_failure(self):
+        print("failure!")
