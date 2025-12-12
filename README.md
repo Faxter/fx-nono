@@ -36,9 +36,9 @@ source .venv/bin/activate
     * ✅️ left-click on crossed out hint removes the crossing out
 1. once every cell is marked, checks for success
     * ✅️ on success: displays win message
-        * keep window open in 'read-only' until quit
+        * ✅️ keep window open in 'read-only' until quit
     * ✅️ on fail: displays fail message
-        * continue interaction until success or quit
+        * ✅️ continue interaction until success or quit
     
 ## future features
 * menu for selecting puzzle file to load

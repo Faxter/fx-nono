@@ -7,6 +7,7 @@ from src.colour import Colour
 from src.hint import Hint
 from src.mouse_button import MouseButton, get_mouse_button
 from src.nonogram import Nonogram
+from src.verifier import Verifier
 
 WINDOW_TITLE = "fx-nono"
 WIDTH_BORDER = 1
@@ -28,24 +29,22 @@ class Ui:
         height = (nonogram.puzzle.rows + self.max_col_hints) * self.cell_size
         self.screen = pygame.display.set_mode((width, height))
         self.running = True
+        self.completed = False
 
     def run(self):
-        quit = False
         while self.running:
             self.screen.fill(Colour.BORDER)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                    quit = True
-                elif event.type == pygame.MOUSEBUTTONUP:
+                elif event.type == pygame.MOUSEBUTTONUP and not self.completed:
                     self.__handle_click(event.button, event.pos)
                     self.__check_complete()
             self.__draw_hints()
             self.__draw_grid()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)
-        if quit:
-            pygame.quit()
+        pygame.quit()
 
     def __handle_click(self, button, position):
         col = position[0] // self.cell_size
@@ -123,7 +122,14 @@ class Ui:
 
     def __check_complete(self):
         if self.nonogram.grid.is_complete():
-            self.running = False
+            verifier = Verifier(self.nonogram.puzzle, self.nonogram.grid)
+            success = verifier.verify()
+            if not success:
+                self.display_failure()
+                self.completed = False
+            else:
+                self.display_success()
+                self.completed = True
 
     def __draw_grid(self):
         grid = self.nonogram.grid
