@@ -29,6 +29,9 @@ class Ui:
         self.screen = pygame.display.set_mode((width, height))
         self.running = True
         self.completed: None | bool = None
+        self.dragging = False
+        self.dragged_mousebutton = MouseButton.LEFT
+        self.dragged_cells: list[list[int]] = []
 
     def run(self):
         while self.running:
@@ -36,8 +39,12 @@ class Ui:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-                elif event.type == pygame.MOUSEBUTTONUP and not self.completed:
+                elif event.type == pygame.MOUSEBUTTONDOWN and not self.completed:
                     self.__handle_click(event.button, event.pos)
+                elif event.type == pygame.MOUSEMOTION and self.dragging:
+                    self.__handle_mouse_position(event.pos)
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    self.__handle_un_click()
                     self.__check_complete()
             self.__draw_hints()
             self.__draw_grid()
@@ -47,9 +54,11 @@ class Ui:
         pygame.quit()
 
     def __handle_click(self, button, position):
+        self.dragging = True
         col = position[0] // self.cell_size
         row = position[1] // self.cell_size
         btn: MouseButton = get_mouse_button(button)
+        self.dragged_mousebutton = btn
         if self.__is_click_event_on_grid(col, row):
             self.__click_into_grid(col, row, btn)
         elif self.__is_click_event_on_top_hint(col, row) and btn == MouseButton.LEFT:
@@ -57,12 +66,25 @@ class Ui:
         elif self.__is_click_event_on_left_hint(col, row) and btn == MouseButton.LEFT:
             self.__click_into_left_hints(col, row)
 
+    def __handle_mouse_position(self, position):
+        col = position[0] // self.cell_size
+        row = position[1] // self.cell_size
+        if (
+            self.__is_click_event_on_grid(col, row)
+            and [col, row] not in self.dragged_cells
+        ):
+            self.__click_into_grid(col, row, self.dragged_mousebutton)
+
+    def __handle_un_click(self):
+        self.dragging = False
+        self.dragged_cells = []
+
     def __is_click_event_on_grid(self, col: int, row: int):
         return (
             col >= self.max_row_hints
-            and col <= self.max_row_hints + self.nonogram.grid.columns
+            and col < self.max_row_hints + self.nonogram.grid.columns
             and row >= self.max_col_hints
-            and row <= self.max_col_hints + self.nonogram.grid.rows
+            and row < self.max_col_hints + self.nonogram.grid.rows
         )
 
     def __is_click_event_on_top_hint(self, col: int, row: int):
@@ -83,6 +105,7 @@ class Ui:
 
     def __click_into_grid(self, col: int, row: int, button: MouseButton):
         self.completed = None
+        self.dragged_cells.append([col, row])
         grid_col, grid_row = self.__grid_coord_from_position(col, row)
         left_pressed = button == MouseButton.LEFT
         middle_pressed = button == MouseButton.MIDDLE

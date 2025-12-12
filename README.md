@@ -29,6 +29,8 @@ The numbers on the top and to the left are called `hints`. They tell you how lon
 
 You can click a hint to strike it through. Do so again to toggle.
 
+You can click and drag to mark multiple cells quicker.
+
 Once every cell is marked either as `full` or `empty`, the resulting image is locked in for you to admire in your success. If your solution does not match the hints, you can continue puzzling until you find a correct configuration.
 
 ## load different puzzle
@@ -48,7 +50,6 @@ Theoretically, we could do without width and height because they are implicitly 
 * display cell states with sprites instead of plain colour
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
-* click and drag to mark multiple cells in a row
 * highlight rows and columns with contradiction on failed verification
 
 ## initiative ideas
