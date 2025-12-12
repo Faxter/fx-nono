@@ -4,6 +4,7 @@ environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame
 
 from src.colour import Colour
+from src.grid import GridCoord
 from src.hint import Hint
 from src.mouse_button import MouseButton, get_mouse_button
 from src.nonogram import Nonogram
@@ -31,7 +32,7 @@ class Ui:
         self.completed: None | bool = None
         self.dragging = False
         self.dragged_mousebutton = MouseButton.LEFT
-        self.dragged_cells: list[list[int]] = []
+        self.dragged_cells: set[GridCoord] = set()
 
     def run(self):
         while self.running:
@@ -71,13 +72,13 @@ class Ui:
         row = position[1] // self.cell_size
         if (
             self.__is_click_event_on_grid(col, row)
-            and [col, row] not in self.dragged_cells
+            and self.__grid_coord_from_position(col, row) not in self.dragged_cells
         ):
             self.__click_into_grid(col, row, self.dragged_mousebutton)
 
     def __handle_un_click(self):
         self.dragging = False
-        self.dragged_cells = []
+        self.dragged_cells.clear()
 
     def __is_click_event_on_grid(self, col: int, row: int):
         return (
@@ -105,28 +106,28 @@ class Ui:
 
     def __click_into_grid(self, col: int, row: int, button: MouseButton):
         self.completed = None
-        self.dragged_cells.append([col, row])
-        grid_col, grid_row = self.__grid_coord_from_position(col, row)
+        grid_coord = self.__grid_coord_from_position(col, row)
+        self.dragged_cells.add(grid_coord)
         left_pressed = button == MouseButton.LEFT
         middle_pressed = button == MouseButton.MIDDLE
         right_pressed = button == MouseButton.RIGHT
         if (
-            (left_pressed and self.nonogram.grid.is_cell_full(grid_col, grid_row))
-            or (middle_pressed and self.nonogram.grid.is_cell_maybe(grid_col, grid_row))
-            or (right_pressed and self.nonogram.grid.is_cell_empty(grid_col, grid_row))
+            (left_pressed and self.nonogram.grid.is_cell_full(grid_coord))
+            or (middle_pressed and self.nonogram.grid.is_cell_maybe(grid_coord))
+            or (right_pressed and self.nonogram.grid.is_cell_empty(grid_coord))
         ):
-            self.nonogram.grid.reset(grid_col, grid_row)
+            self.nonogram.grid.reset(grid_coord)
         elif left_pressed:
-            self.nonogram.grid.fill(grid_col, grid_row)
+            self.nonogram.grid.fill(grid_coord)
         elif middle_pressed:
-            self.nonogram.grid.maybe(grid_col, grid_row)
+            self.nonogram.grid.maybe(grid_coord)
         elif right_pressed:
-            self.nonogram.grid.clear(grid_col, grid_row)
+            self.nonogram.grid.clear(grid_coord)
 
     def __grid_coord_from_position(self, col: int, row: int):
         col -= self.max_row_hints
         row -= self.max_col_hints
-        return col, row
+        return GridCoord(col, row)
 
     def __click_into_top_hints(self, col: int, row: int):
         column_hints = self.nonogram.puzzle.column_hints[col - self.max_row_hints]
@@ -153,11 +154,12 @@ class Ui:
         for col in range(grid.columns):
             for row in range(grid.rows):
                 colour = ()
-                if grid.is_cell_full(col, row):
+                coord = GridCoord(col, row)
+                if grid.is_cell_full(coord):
                     colour = Colour.FULL
-                elif grid.is_cell_empty(col, row):
+                elif grid.is_cell_empty(coord):
                     colour = Colour.EMPTY
-                elif grid.is_cell_maybe(col, row):
+                elif grid.is_cell_maybe(coord):
                     colour = Colour.MAYBE
                 else:
                     colour = Colour.UNKNOWN
