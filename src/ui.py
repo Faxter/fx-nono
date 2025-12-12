@@ -7,7 +7,6 @@ from src.colour import Colour
 from src.hint import Hint
 from src.mouse_button import MouseButton, get_mouse_button
 from src.nonogram import Nonogram
-from src.verifier import Verifier
 
 WINDOW_TITLE = "fx-nono"
 WIDTH_BORDER = 1
@@ -122,9 +121,7 @@ class Ui:
 
     def __check_complete(self):
         if self.nonogram.grid.is_complete():
-            verifier = Verifier(self.nonogram.puzzle, self.nonogram.grid)
-            success = verifier.verify()
-            if not success:
+            if not self.nonogram.verify():
                 self.display_failure()
                 self.completed = False
             else:
