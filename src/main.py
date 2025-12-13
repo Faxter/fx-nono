@@ -3,7 +3,7 @@ from pathlib import Path
 
 from src.file_parser import parse
 from src.nonogram import Nonogram
-from src.ui import Ui
+from src.ui.ui import Ui
 
 CELL_SIZE = 30
 FONT_SIZE = 25
