@@ -5,8 +5,8 @@ from src.file_parser import parse
 from src.nonogram import Nonogram
 from src.ui.ui import Ui
 
-CELL_SIZE = 30
-FONT_SIZE = 25
+CELL_SIZE = 25
+FONT_SIZE = 20
 
 
 def main():
