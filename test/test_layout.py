@@ -8,7 +8,7 @@ from src.ui.layout import Layout
 class TestLayout(unittest.TestCase):
     def setUp(self):
         nonogram = Nonogram(Puzzle(3, 2, [[1], [1], [1]], [[1], [1]]))
-        self.layout = Layout(nonogram, 1, 1)
+        self.layout = Layout(nonogram)
 
     def test_create_layout(self):
         self.assertIsInstance(self.layout, Layout)

@@ -3,10 +3,10 @@ from src.nonogram import Nonogram
 
 
 class Layout:
-    def __init__(self, nonogram: Nonogram, max_row_hints: int, max_col_hints: int):
+    def __init__(self, nonogram: Nonogram):
         self.nonogram = nonogram
-        self.max_row_hints = max_row_hints
-        self.max_col_hints = max_col_hints
+        self.max_row_hints = max(list(map(len, nonogram.puzzle.row_hints)))
+        self.max_col_hints = max(list(map(len, nonogram.puzzle.column_hints)))
 
     def grid_coord_from_position(self, col: int, row: int):
         col -= self.max_row_hints
