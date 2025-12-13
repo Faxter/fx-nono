@@ -1,6 +1,8 @@
 # fx-nono
 A pygame app for solving nonograms
 
+![screenshot of large solved nonogram](res/screenshot-1.png?raw=true)
+
 ## prepare environment
 ```
 uv sync
@@ -20,6 +22,8 @@ source .venv/bin/activate
 ```
 
 ## how to nonogram
+![screenshot of small nonogram being solved](res/screenshot-0.png?raw=true)
+
 The numbers on the top and to the left are called `hints`. They tell you how long the blocks need to be in that column or row.
 
 * Left-click to mark a cell as `full`
