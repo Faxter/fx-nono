@@ -12,7 +12,7 @@ source .venv/bin/activate
 ## run application
 ```
 ./run.sh
-./run.sh puzzles/other-puzzle.json
+./run.sh puzzles/example-2.json
 ```
 
 ## run tests
@@ -47,10 +47,11 @@ To load a different puzzle, create a `.json` file as desribed below and provide 
 | rows    | list of list of int | row hints (each inner list contains the hints for one row)      |
 | columns | list of list of int | column hints (each inner list contains the hints for one column)|
 
-Theoretically, we could do without width and height because they are implicitly given by the length of the hint lists. But this way, it is easier to immediately read to size of the puzzle.
+Theoretically, we could do without width and height because they are implicitly given by the length of the hint lists. But this way it is easier to immediately read to size of the puzzle.
 
     
 ## feature ideas
+* use thicker border lines every five cells for easier reading
 * display cell states with sprites instead of plain colour
 * menu for selecting puzzle file to load
 * saving/loading progress in personal save file
