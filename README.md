@@ -10,6 +10,8 @@ source .venv/bin/activate
 ```
 
 ## run application
+Run without argument to get a file chooser dialog to select the puzzle file or provide path to file as argument.
+
 ```
 ./run.sh
 ./run.sh puzzles/example-2.json
@@ -53,7 +55,6 @@ Theoretically, we could do without width and height because they are implicitly 
 ## feature ideas
 * use thicker border lines every five cells for easier reading
 * display cell states with sprites instead of plain colour
-* menu for selecting puzzle file to load
 * saving/loading progress in personal save file
 * highlight rows and columns with contradiction on failed verification
 
