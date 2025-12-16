@@ -53,7 +53,6 @@ Theoretically, we could do without width and height because they are implicitly 
 
     
 ## feature ideas
-* use thicker border lines every five cells for easier reading
 * display cell states with sprites instead of plain colour
 * saving/loading progress in personal save file
 * highlight rows and columns with contradiction on failed verification

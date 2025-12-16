@@ -8,6 +8,7 @@ from src.ui.layout import Layout
 
 FONT = "Consolas"
 WIDTH_BORDER = 1
+THICK_BORDER_SPACING = 5
 
 
 class Renderer:
@@ -30,30 +31,40 @@ class Renderer:
     def draw_grid(self, grid: Grid):
         for col in range(grid.columns):
             for row in range(grid.rows):
-                colour = ()
-                coord = GridCoord(col, row)
-                if grid.is_cell_full(coord):
-                    colour = Colour.FULL
-                elif grid.is_cell_empty(coord):
-                    colour = Colour.EMPTY
-                elif grid.is_cell_maybe(coord):
-                    colour = Colour.MAYBE
-                else:
-                    colour = Colour.UNKNOWN
                 pygame.draw.rect(
                     self.screen,
-                    colour,
-                    self.__grid_rect(
-                        self.layout.max_row_hints + col, self.layout.max_col_hints + row
+                    self.__get_cell_colour(GridCoord(col, row)),
+                    self.__get_rectangle(
+                        self.layout.max_row_hints + col,
+                        self.layout.max_col_hints + row,
+                        self.__get_border_width(col),
+                        self.__get_border_width(row),
                     ),
                 )
 
-    def __grid_rect(self, col: int, row: int):
+    def __get_cell_colour(self, coord: GridCoord):
+        if self.layout.nonogram.grid.is_cell_full(coord):
+            return Colour.FULL
+        elif self.layout.nonogram.grid.is_cell_empty(coord):
+            return Colour.EMPTY
+        elif self.layout.nonogram.grid.is_cell_maybe(coord):
+            return Colour.MAYBE
+        else:
+            return Colour.UNKNOWN
+
+    def __get_rectangle(self, col: int, row: int, col_border, row_border):
         return (
             col * self.cell_size + WIDTH_BORDER,
             row * self.cell_size + WIDTH_BORDER,
-            self.cell_size - 2 * WIDTH_BORDER,
-            self.cell_size - 2 * WIDTH_BORDER,
+            self.cell_size - 2 * col_border,
+            self.cell_size - 2 * row_border,
+        )
+
+    def __get_border_width(self, index: int):
+        return (
+            WIDTH_BORDER * 2
+            if (index + 1) % THICK_BORDER_SPACING == 0
+            else WIDTH_BORDER
         )
 
     def draw_hints(self, puzzle: Puzzle):
@@ -63,10 +74,13 @@ class Renderer:
     def __draw_top_hints(self, puzzle: Puzzle):
         for i, hints in enumerate(puzzle.column_hints):
             for j in range(self.layout.max_col_hints):
+                col_border_size = self.__get_border_width(i)
                 rect = pygame.draw.rect(
                     self.screen,
                     Colour.HINT_BACKGROUND,
-                    self.__grid_rect(self.layout.max_row_hints + i, j),
+                    self.__get_rectangle(
+                        self.layout.max_row_hints + i, j, col_border_size, WIDTH_BORDER
+                    ),
                 )
                 self.__fill_with_hint(
                     rect,
@@ -78,10 +92,13 @@ class Renderer:
     def __draw_left_hints(self, puzzle: Puzzle):
         for i, hints in enumerate(puzzle.row_hints):
             for j in range(self.layout.max_row_hints):
+                row_border_size = self.__get_border_width(i)
                 rect = pygame.draw.rect(
                     self.screen,
                     Colour.HINT_BACKGROUND,
-                    self.__grid_rect(j, self.layout.max_col_hints + i),
+                    self.__get_rectangle(
+                        j, self.layout.max_col_hints + i, WIDTH_BORDER, row_border_size
+                    ),
                 )
                 self.__fill_with_hint(
                     rect,
@@ -112,5 +129,5 @@ class Renderer:
         pygame.draw.rect(
             self.screen,
             Colour.SUCCESS if completed else Colour.FAILURE,
-            self.__grid_rect(0, 0),
+            self.__get_rectangle(0, 0, 0, 0),
         )
