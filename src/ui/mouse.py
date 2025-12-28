@@ -22,6 +22,9 @@ def get_mouse_button(index: int) -> MouseButton:
             return MouseButton.LEFT
 
 
+MENU_ROW = 1
+
+
 class MouseController:
     def __init__(self, layout: Layout, cell_size: int):
         self.layout = layout
@@ -85,14 +88,14 @@ class MouseController:
             col - self.layout.max_row_hints
         ]
         no_of_empty_hint_cells = self.layout.max_col_hints - len(column_hints)
-        hint_index = row - no_of_empty_hint_cells
+        hint_index = row - no_of_empty_hint_cells - MENU_ROW
         if hint_index >= 0:
             hint = column_hints[hint_index]
             hint.toggle_crossed()
 
     def __click_into_left_hints(self, col: int, row: int):
         row_hints = self.layout.nonogram.puzzle.row_hints[
-            row - self.layout.max_col_hints
+            row - self.layout.max_col_hints - MENU_ROW
         ]
         no_of_empty_hint_cells = self.layout.max_row_hints - len(row_hints)
         hint_index = col - no_of_empty_hint_cells

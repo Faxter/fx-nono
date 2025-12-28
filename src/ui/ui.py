@@ -40,6 +40,7 @@ class Ui:
             self.renderer.draw_hints(self.nonogram.puzzle)
             self.renderer.draw_grid(self.nonogram.grid)
             self.renderer.draw_success_indicator(self.completed)
+            self.renderer.draw_menu_bar()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)
         pygame.quit()

@@ -8,3 +8,4 @@ class Colour:
     HINT_FONT = (255, 255, 255)
     SUCCESS = (0, 240, 25)
     FAILURE = (240, 0, 25)
+    MENU = (66, 66, 66)
