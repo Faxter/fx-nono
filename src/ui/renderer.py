@@ -30,20 +30,21 @@ class Renderer:
     def draw_background(self):
         self.screen.fill(Colour.BORDER)
 
-    def draw_menu_bar(self):
+    def draw_menu_bar(self, menus: list[str]):
         pygame.draw.rect(
             self.screen, Colour.MENU, (0, 0, self.screen.get_width(), self.cell_size)
         )
-        menus = ["Open", "Save", "Load", "About"]
-
+        menu_rectangles: list[pygame.Rect] = []
         x = THICK_BORDER_SPACING
         for menu_name in menus:
             text = self.font.render(menu_name, True, Colour.HINT_FONT)
             rect = text.get_rect(topleft=(x, 0))
+            menu_rectangles.append(rect)
             self.screen.blit(text, rect)
             x += rect.width + MENU_X_SPACING
         if x > self.screen.get_width():
             self.screen = pygame.display.set_mode((x, self.screen.get_height()))
+        return menu_rectangles
 
     def draw_grid(self, grid: Grid):
         for col in range(grid.columns):

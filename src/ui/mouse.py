@@ -1,5 +1,8 @@
 from enum import Enum
 
+import pygame
+
+import src.menu as menu
 from src.grid import GridCoord
 from src.ui.layout import Layout
 
@@ -59,7 +62,18 @@ class MouseController:
         ):
             self.__click_into_grid(col, row, self.dragged_mousebutton)
 
-    def handle_mouse_up(self):
+    def handle_mouse_up(self, button, position, menu_rectangles: list[pygame.Rect]):
+        # TODO: mouse controller should not know anything about which position is what menu
+        if get_mouse_button(button) == MouseButton.LEFT and len(menu_rectangles) == 4:
+            if menu_rectangles[0].collidepoint(position):
+                menu.open()
+            elif menu_rectangles[1].collidepoint(position):
+                menu.save()
+            elif menu_rectangles[2].collidepoint(position):
+                menu.load()
+            elif menu_rectangles[3].collidepoint(position):
+                menu.about()
+
         self.dragging = False
         self.dragged_cells.clear()
 

@@ -10,6 +10,7 @@ from src.ui.renderer import Renderer
 
 WINDOW_TITLE = "fx-nono"
 GAME_FPS = 60
+MENU_BAR = ["Open", "Save", "Load", "About"]
 
 
 class Ui:
@@ -27,6 +28,10 @@ class Ui:
     def run(self):
         while self.running:
             self.renderer.draw_background()
+            self.renderer.draw_hints(self.nonogram.puzzle)
+            self.renderer.draw_grid(self.nonogram.grid)
+            self.renderer.draw_success_indicator(self.completed)
+            menu_rectangles = self.renderer.draw_menu_bar(MENU_BAR)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -35,12 +40,8 @@ class Ui:
                 elif event.type == pygame.MOUSEMOTION:
                     self.mouse.handle_mouse_position(event.pos)
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    self.mouse.handle_mouse_up()
+                    self.mouse.handle_mouse_up(event.button, event.pos, menu_rectangles)
                     self.__check_complete()
-            self.renderer.draw_hints(self.nonogram.puzzle)
-            self.renderer.draw_grid(self.nonogram.grid)
-            self.renderer.draw_success_indicator(self.completed)
-            self.renderer.draw_menu_bar()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)
         pygame.quit()
