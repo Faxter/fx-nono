@@ -1,3 +1,4 @@
+import copy
 import unittest
 
 from src.cell_state import CellState
@@ -91,3 +92,10 @@ class TestNonogram(unittest.TestCase):
         self.nonogram.grid.clear(GridCoord(3, 1))
         self.nonogram.grid.fill(GridCoord(3, 2))
         self.assertFalse(self.nonogram.verify())
+
+    def test_set_grid(self):
+        grid_copy = copy.deepcopy(self.nonogram.grid)
+        grid_copy.reset(GridCoord(0, 0))
+        self.assertTrue(self.nonogram.grid.is_cell_full(GridCoord(0, 0)))
+        self.nonogram.set_grid(grid_copy)
+        self.assertTrue(self.nonogram.grid.is_cell_unknown(GridCoord(0, 0)))

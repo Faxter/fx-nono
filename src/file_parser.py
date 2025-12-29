@@ -1,5 +1,8 @@
 import json
+from os.path import join
 from pathlib import Path
+
+import jsonpickle
 
 from src.grid import Grid
 from src.puzzle import Puzzle
@@ -18,20 +21,25 @@ def parse(filename: Path) -> Puzzle:
         exit(1)
 
 
-def write_savefile(filename: Path, grid: Grid):
+def write_savefile(filename: str, grid: Grid):
+    filepath = join(Path.home(), "fx-nono", filename)
     try:
-        with open(filename, "w") as file:
-            json.dump(grid, file)
+        with open(filepath, "w") as file:
+            file.write(jsonpickle.encode(grid))
+            print(f"game saved to {filepath}")
     except FileNotFoundError:
         print(f"file {filename} could not be found")
     except FileExistsError:
         print(f"file {filename} already exists")
 
 
-def load_savefile(filename: Path) -> Grid:
+def load_savefile(filename: str) -> Grid:
+    filepath = join(Path.home(), "fx-nono", filename)
     try:
-        with open(filename, "r") as file:
-            return json.load(file)
+        with open(filepath, "r") as file:
+            print(f"loading game state from {filepath}")
+            grid = jsonpickle.decode(file.read())
+            return grid
     except FileNotFoundError:
         print(f"file {filename} could not be found")
     except json.JSONDecodeError:

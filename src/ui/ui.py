@@ -17,8 +17,8 @@ class Ui:
     def __init__(self, nonogram: Nonogram, cell_size: int, font_size: int):
         pygame.init()
         pygame.display.set_caption(WINDOW_TITLE)
-        self.menu = Menu()
         self.nonogram = nonogram
+        self.menu = Menu(nonogram)
         self.clock = pygame.time.Clock()
         self.layout = Layout(nonogram)
         self.renderer = Renderer(font_size, self.layout, cell_size)
