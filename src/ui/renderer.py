@@ -9,6 +9,8 @@ from src.ui.layout import Layout
 FONT = "Consolas"
 WIDTH_BORDER = 1
 THICK_BORDER_SPACING = 5
+MENU_SPACING = 20
+MENU = 1
 
 
 class Renderer:
@@ -19,7 +21,7 @@ class Renderer:
         cell_size: int,
     ):
         width = (layout.nonogram.puzzle.columns + layout.max_row_hints) * cell_size
-        height = (layout.nonogram.puzzle.rows + layout.max_col_hints) * cell_size
+        height = (layout.nonogram.puzzle.rows + layout.max_col_hints + MENU) * cell_size
         self.screen = pygame.display.set_mode((width, height))
         self.font = pygame.font.SysFont(FONT, font_size)
         self.layout = layout
@@ -27,6 +29,24 @@ class Renderer:
 
     def draw_background(self):
         self.screen.fill(Colour.BORDER)
+
+    def draw_menu_bar(self, menus: list[str]):
+        pygame.draw.rect(
+            self.screen, Colour.MENU, (0, 0, self.screen.get_width(), self.cell_size)
+        )
+        menu_rectangles: dict[str, pygame.Rect] = {}
+        horizontal = THICK_BORDER_SPACING
+        for menu_name in menus:
+            text = self.font.render(menu_name, True, Colour.HINT_FONT)
+            rect = text.get_rect(topleft=(horizontal, 0))
+            menu_rectangles[menu_name] = rect
+            self.screen.blit(text, rect)
+            horizontal += rect.width + MENU_SPACING
+        if horizontal > self.screen.get_width():
+            self.screen = pygame.display.set_mode(
+                (horizontal, self.screen.get_height())
+            )
+        return menu_rectangles
 
     def draw_grid(self, grid: Grid):
         for col in range(grid.columns):
@@ -55,7 +75,7 @@ class Renderer:
     def __get_rectangle(self, col: int, row: int, col_border, row_border):
         return (
             col * self.cell_size + WIDTH_BORDER,
-            row * self.cell_size + WIDTH_BORDER,
+            (row + MENU) * self.cell_size + WIDTH_BORDER,
             self.cell_size - 2 * col_border,
             self.cell_size - 2 * row_border,
         )

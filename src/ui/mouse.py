@@ -1,6 +1,9 @@
 from enum import Enum
 
+import pygame
+
 from src.grid import GridCoord
+from src.menu import Menu
 from src.ui.layout import Layout
 
 
@@ -20,6 +23,9 @@ def get_mouse_button(index: int) -> MouseButton:
             return MouseButton.RIGHT
         case _:
             return MouseButton.LEFT
+
+
+MENU_ROW = 1
 
 
 class MouseController:
@@ -56,9 +62,19 @@ class MouseController:
         ):
             self.__click_into_grid(col, row, self.dragged_mousebutton)
 
-    def handle_mouse_up(self):
+    def handle_mouse_up(
+        self, button, position, menu_rectangles: dict[str, pygame.Rect], menu: Menu
+    ):
         self.dragging = False
         self.dragged_cells.clear()
+        _, row = self.__cell_from_pos(position)
+        if (
+            self.layout.is_on_menu_bar(row)
+            and get_mouse_button(button) == MouseButton.LEFT
+        ):
+            for name, r in menu_rectangles.items():
+                if r.collidepoint(position):
+                    menu.select_menu(name)
 
     def __click_into_grid(self, col: int, row: int, button: MouseButton):
         self.completed = None
@@ -85,14 +101,14 @@ class MouseController:
             col - self.layout.max_row_hints
         ]
         no_of_empty_hint_cells = self.layout.max_col_hints - len(column_hints)
-        hint_index = row - no_of_empty_hint_cells
+        hint_index = row - no_of_empty_hint_cells - MENU_ROW
         if hint_index >= 0:
             hint = column_hints[hint_index]
             hint.toggle_crossed()
 
     def __click_into_left_hints(self, col: int, row: int):
         row_hints = self.layout.nonogram.puzzle.row_hints[
-            row - self.layout.max_col_hints
+            row - self.layout.max_col_hints - MENU_ROW
         ]
         no_of_empty_hint_cells = self.layout.max_row_hints - len(row_hints)
         hint_index = col - no_of_empty_hint_cells
