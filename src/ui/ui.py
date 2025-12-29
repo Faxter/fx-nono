@@ -3,6 +3,7 @@ from os import environ
 environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame
 
+from src.menu import Menu
 from src.nonogram import Nonogram
 from src.ui.layout import Layout
 from src.ui.mouse import MouseController
@@ -10,13 +11,13 @@ from src.ui.renderer import Renderer
 
 WINDOW_TITLE = "fx-nono"
 GAME_FPS = 60
-MENU_BAR = ["Open", "Save", "Load", "About"]
 
 
 class Ui:
     def __init__(self, nonogram: Nonogram, cell_size: int, font_size: int):
         pygame.init()
         pygame.display.set_caption(WINDOW_TITLE)
+        self.menu = Menu()
         self.nonogram = nonogram
         self.clock = pygame.time.Clock()
         self.layout = Layout(nonogram)
@@ -31,7 +32,7 @@ class Ui:
             self.renderer.draw_hints(self.nonogram.puzzle)
             self.renderer.draw_grid(self.nonogram.grid)
             self.renderer.draw_success_indicator(self.completed)
-            menu_rectangles = self.renderer.draw_menu_bar(MENU_BAR)
+            menu_rectangles = self.renderer.draw_menu_bar(self.menu.menu_names())
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
@@ -40,7 +41,9 @@ class Ui:
                 elif event.type == pygame.MOUSEMOTION:
                     self.mouse.handle_mouse_position(event.pos)
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    self.mouse.handle_mouse_up(event.button, event.pos, menu_rectangles)
+                    self.mouse.handle_mouse_up(
+                        event.button, event.pos, menu_rectangles, self.menu
+                    )
                     self.__check_complete()
             pygame.display.flip()
             _ = self.clock.tick(GAME_FPS)

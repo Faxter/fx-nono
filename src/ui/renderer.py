@@ -9,7 +9,7 @@ from src.ui.layout import Layout
 FONT = "Consolas"
 WIDTH_BORDER = 1
 THICK_BORDER_SPACING = 5
-MENU_X_SPACING = 20
+MENU_SPACING = 20
 MENU = 1
 
 
@@ -34,16 +34,18 @@ class Renderer:
         pygame.draw.rect(
             self.screen, Colour.MENU, (0, 0, self.screen.get_width(), self.cell_size)
         )
-        menu_rectangles: list[pygame.Rect] = []
-        x = THICK_BORDER_SPACING
+        menu_rectangles: dict[str, pygame.Rect] = {}
+        horizontal = THICK_BORDER_SPACING
         for menu_name in menus:
             text = self.font.render(menu_name, True, Colour.HINT_FONT)
-            rect = text.get_rect(topleft=(x, 0))
-            menu_rectangles.append(rect)
+            rect = text.get_rect(topleft=(horizontal, 0))
+            menu_rectangles[menu_name] = rect
             self.screen.blit(text, rect)
-            x += rect.width + MENU_X_SPACING
-        if x > self.screen.get_width():
-            self.screen = pygame.display.set_mode((x, self.screen.get_height()))
+            horizontal += rect.width + MENU_SPACING
+        if horizontal > self.screen.get_width():
+            self.screen = pygame.display.set_mode(
+                (horizontal, self.screen.get_height())
+            )
         return menu_rectangles
 
     def draw_grid(self, grid: Grid):

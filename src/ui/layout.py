@@ -38,3 +38,6 @@ class Layout:
             and row >= self.max_col_hints + MENU_ROW
             and row < self.max_col_hints + self.nonogram.puzzle.rows + MENU_ROW
         )
+
+    def is_on_menu_bar(self, row: int):
+        return row == 0

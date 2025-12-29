@@ -1,6 +1,10 @@
 import unittest
+from unittest.mock import Mock
+
+from pygame import Rect
 
 from src.grid import GridCoord
+from src.menu import Menu
 from src.nonogram import Nonogram
 from src.puzzle import Puzzle
 from src.ui.layout import Layout
@@ -63,6 +67,12 @@ class TestMouseController(unittest.TestCase):
 
     def test_handle_mouse_movement_after_dragging(self):
         self.mouse_controller.handle_mouse_down(1, (0, 0))
-        self.mouse_controller.handle_mouse_up(1, (0, 0), [])
+        self.mouse_controller.handle_mouse_up(1, (0, 0), {}, Menu())
         self.mouse_controller.handle_mouse_position((29, 55))
         self.assertTrue(self.layout.nonogram.grid.is_cell_unknown(GridCoord(0, 0)))
+
+    def test_handle_mouse_up_on_menu(self):
+        menu_mock = Mock()
+        r = {"Open": Rect(0, 0, 50, 25)}
+        self.mouse_controller.handle_mouse_up(1, (5, 5), r, menu_mock)
+        menu_mock.select_menu.assert_called_once_with("Open")
