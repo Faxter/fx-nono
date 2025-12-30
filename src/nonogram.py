@@ -20,6 +20,9 @@ class Nonogram:
                 return False
         return True
 
+    def is_compatible(self, other: Grid):
+        return self.grid.columns == other.columns and self.grid.rows == other.rows
+
     def set_grid(self, grid: Grid):
         self.grid = grid
 

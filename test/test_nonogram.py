@@ -93,6 +93,15 @@ class TestNonogram(unittest.TestCase):
         self.nonogram.grid.fill(GridCoord(3, 2))
         self.assertFalse(self.nonogram.verify())
 
+    def test_is_compatible(self):
+        grid_copy = copy.deepcopy(self.nonogram.grid)
+        self.assertTrue(self.nonogram.is_compatible(grid_copy))
+        grid_copy.columns = 0
+        self.assertFalse(self.nonogram.is_compatible(grid_copy))
+        grid_copy.columns = self.nonogram.grid.columns
+        grid_copy.rows = 0
+        self.assertFalse(self.nonogram.is_compatible(grid_copy))
+
     def test_set_grid(self):
         grid_copy = copy.deepcopy(self.nonogram.grid)
         grid_copy.reset(GridCoord(0, 0))
