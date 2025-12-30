@@ -90,6 +90,7 @@ class Renderer:
     def draw_hints(self, puzzle: Puzzle):
         self.__draw_top_hints(puzzle)
         self.__draw_left_hints(puzzle)
+        self.font.strikethrough = False
 
     def __draw_top_hints(self, puzzle: Puzzle):
         for i, hints in enumerate(puzzle.column_hints):
