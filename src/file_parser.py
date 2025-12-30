@@ -25,23 +25,30 @@ def write_savefile(filename: str, grid: Grid):
     filepath = join(Path.home(), "fx-nono", filename)
     try:
         with open(filepath, "w") as file:
-            file.write(jsonpickle.encode(grid))
-            print(f"game saved to {filepath}")
+            json = jsonpickle.encode(grid)
+            if json:
+                file.write(json)
+                print(f"game saved to {filename}")
+            else:
+                print("game state could not be encoded")
     except FileNotFoundError:
-        print(f"file {filename} could not be found")
+        print(f"file {filepath} could not be found")
     except FileExistsError:
-        print(f"file {filename} already exists")
+        print(f"file {filepath} already exists")
 
 
 def load_savefile(filename: str) -> Grid:
     filepath = join(Path.home(), "fx-nono", filename)
     try:
         with open(filepath, "r") as file:
-            print(f"loading game state from {filepath}")
+            print(f"loading game state from {filename}")
             grid = jsonpickle.decode(file.read())
-            return grid
+            if type(grid) is Grid:
+                return grid
+            else:
+                print(f"file {filepath} could not be decoded into correct type")
     except FileNotFoundError:
-        print(f"file {filename} could not be found")
+        print(f"file {filepath} could not be found")
     except json.JSONDecodeError:
-        print(f"could not decode JSON from {filename}")
+        print(f"could not decode JSON from {filepath}")
     return Grid(0, 0)
