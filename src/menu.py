@@ -9,7 +9,6 @@ from src.ui.file_chooser import (
 class Menu:
     def __init__(self, nonogram: Nonogram):
         self.menu_items = {
-            "Open": Menu.open,
             "Save": Menu.save,
             "Load": Menu.load,
             "About": Menu.about,
@@ -26,9 +25,6 @@ class Menu:
     def save(self):
         filepath = get_filepath_to_save_as_from_dialog()
         write_savefile(filepath, self.nonogram.grid)
-
-    def open(self):
-        print("open")
 
     def load(self):
         filepath = get_filepath_from_dialog()

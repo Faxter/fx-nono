@@ -8,27 +8,18 @@ class TestMenu(unittest.TestCase):
     def test_menu_names(self):
         n = Mock()
         m = src.menu.Menu(n)
-        self.assertListEqual(m.menu_names(), ["Open", "Save", "Load", "About"])
+        self.assertListEqual(m.menu_names(), ["Save", "Load", "About"])
 
     def test_select_menu(self):
-        src.menu.Menu.open = Mock()
         src.menu.Menu.save = Mock()
         src.menu.Menu.load = Mock()
         src.menu.Menu.about = Mock()
         n = Mock()
         m = src.menu.Menu(n)
-        m.select_menu("Open")
-        src.menu.Menu.open.assert_called_once()
-        src.menu.Menu.save.assert_not_called()
+        m.select_menu("Save")
+        src.menu.Menu.save.assert_called_once()
         src.menu.Menu.load.assert_not_called()
         src.menu.Menu.about.assert_not_called()
-
-    @patch("builtins.print")
-    def test_open(self, mock_print):
-        n = Mock()
-        m = src.menu.Menu(n)
-        m.open()
-        mock_print.assert_called_once_with("open")
 
     @patch("src.menu.get_filepath_to_save_as_from_dialog")
     @patch("src.menu.write_savefile")
