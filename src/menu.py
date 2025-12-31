@@ -4,6 +4,7 @@ from src.ui.file_chooser import (
     get_filepath_from_dialog,
     get_filepath_to_save_as_from_dialog,
 )
+from src.ui.message_box import show_message
 
 
 class Menu:
@@ -37,4 +38,9 @@ class Menu:
             print("save file is not compatible with puzzle size")
 
     def about(self):
-        print("fx-nono")
+        show_message(
+            "About fx-nono",
+            "fx-nono v1.2.0",
+            "https://github.com/Faxter/fx-nono\n"
+            "more version information in pyproject.toml",
+        )

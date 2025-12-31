@@ -64,9 +64,9 @@ class TestMenu(unittest.TestCase):
         n.set_grid.assert_not_called()
         mock_print.assert_called_once()
 
-    @patch("builtins.print")
-    def test_about(self, mock_print):
+    @patch("src.menu.show_message")
+    def test_about(self, mock_msg_box):
         n = Mock()
         m = src.menu.Menu(n)
         m.about()
-        mock_print.assert_called_once_with("fx-nono")
+        mock_msg_box.assert_called_once()
