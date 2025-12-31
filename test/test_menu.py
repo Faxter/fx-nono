@@ -32,7 +32,6 @@ class TestMenu(unittest.TestCase):
     @patch("src.menu.get_filepath_from_dialog")
     @patch("src.menu.load_savefile")
     def test_load(self, mock_load, mock_dialog):
-        # mock_dialog.return_value
         n = Mock()
         m = src.menu.Menu(n)
         m.load()
