@@ -3,7 +3,7 @@ from pathlib import Path
 
 from src.file_parser import parse
 from src.nonogram import Nonogram
-from src.ui.file_chooser import get_filename_from_dialog
+from src.ui.file_chooser import get_filepath_from_dialog
 from src.ui.ui import Ui
 
 CELL_SIZE = 25
@@ -19,8 +19,8 @@ def main(puzzle_path: Path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        filename = get_filename_from_dialog("puzzles")
-        if len(filename) > 0:
-            main(Path(filename))
+        filepath = get_filepath_from_dialog("puzzles")
+        if filepath.exists():
+            main(filepath)
     else:
         main(Path(sys.argv[1]))

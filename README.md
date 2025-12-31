@@ -39,6 +39,13 @@ You can click and drag to mark multiple cells quicker.
 
 Once every cell is marked either as `full` or `empty`, the resulting image is locked in for you to admire in your success. If your solution does not match the hints, you can continue puzzling until you find a correct configuration.
 
+## save and load
+State of the puzzle can be saved and loaded using the menu bar at the top of the application.
+
+Loading a state must fit the currently opened puzzle. You can't load a save file belonging to a puzzle with a different amount of rows/columns than currently opened.
+
+This uses the file format of `jsonpickle` - do not load any files that you did not create yourself as they could contain malicious code!
+
 ## load different puzzle
 To load a different puzzle, create a `.json` file as desribed below and provide it to `run.sh` as described above. For reference, have a look at `puzzles/example.json`.
 
@@ -54,7 +61,6 @@ Theoretically, we could do without width and height because they are implicitly 
     
 ## feature ideas
 * display cell states with sprites instead of plain colour
-* saving/loading progress in personal save file
 * highlight rows and columns with contradiction on failed verification
 
 ## initiative ideas

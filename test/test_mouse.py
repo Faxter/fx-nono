@@ -67,7 +67,7 @@ class TestMouseController(unittest.TestCase):
 
     def test_handle_mouse_movement_after_dragging(self):
         self.mouse_controller.handle_mouse_down(1, (0, 0))
-        self.mouse_controller.handle_mouse_up(1, (0, 0), {}, Menu())
+        self.mouse_controller.handle_mouse_up(1, (0, 0), {}, Menu(self.layout.nonogram))
         self.mouse_controller.handle_mouse_position((29, 55))
         self.assertTrue(self.layout.nonogram.grid.is_cell_unknown(GridCoord(0, 0)))
 
